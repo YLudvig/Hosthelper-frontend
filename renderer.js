@@ -74,8 +74,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set the userId in localstorage
             localStorage.setItem('userId', message.userId);
 
+            // Fetches remotes
             const remotes = await getAllRemotes();
 
+            // Checks return of getAllRemotes fetch and checks
+            // that it's a list and not empty to avoid breaking the rendering
+            if (Array.isArray(remotes) && remotes.length > 0){
+                // Render the fetched remotes
+                showRemotes(remotes);
+            } else {
+                console.log("No remotes in db for this user")
+            }
+
+            // Alerts user of successful login and on closing the alert user is redirected to the main-page
             alert("Success: " + message.message);
             showPage('main-page');
         } catch (err){
@@ -94,4 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
         showPage('login-page')
     })
 })
+
+function showRemotes(remotes){
+    const container = document.getElementById('remote-container');
+    container.innerHTML = '';
+
+    remotesList.forEach(remote => {
+       const div = document.createElement('div');
+       div.className = 'remote-card';
+       div.innerHTML = `
+            <h3>${remote.name}</h3>
+            <p>${remote.status}</p>
+            <div id="terminal-${remote.id}" class="mini-terminal"></div>
+       `;
+       container.appendChild(div);
+    });
+}
+
 
