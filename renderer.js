@@ -7,6 +7,7 @@
  */
 
 import {loginUser, registerUser} from "./api.js";
+import {getAllRemotes} from "./apiRemote.js";
 
 // Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
@@ -69,7 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const message = await loginUser(name, password);
-            alert("Success: " + message);
+
+            // Set the userId in localstorage
+            localStorage.setItem('userId', message.userId);
+
+            const remotes = await getAllRemotes();
+
+            alert("Success: " + message.message);
             showPage('main-page');
         } catch (err){
             alert(err.message);
@@ -78,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-// Function to log out from proifle
+// Function to log out from profile
 document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-user');
 
