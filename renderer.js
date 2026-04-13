@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-user');
 
     logoutBtn.addEventListener('click', async () => {
+        localStorage.removeItem('userId');
         showPage('login-page')
     })
 })

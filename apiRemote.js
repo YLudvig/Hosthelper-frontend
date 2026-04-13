@@ -18,3 +18,4 @@ export async function getAllRemotes(){
 
     return await response.json();
 }
+
