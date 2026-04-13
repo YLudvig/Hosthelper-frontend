@@ -6,7 +6,7 @@
  * to expose Node.js functionality from the main process.
  */
 
-import { registerUser} from "./api.js";
+import {loginUser, registerUser} from "./api.js";
 
 // Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
@@ -37,23 +37,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-
+// Function to catch input values on register page and then use the API register
+// method to send that to backend and then display backend response
 document.addEventListener('DOMContentLoaded', () => {
     const registerBtn = document.getElementById('register-user');
 
     registerBtn.addEventListener('click', async () => {
-        const username = document.getElementById('register-username').value;
+        const name = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
 
         try {
-            const message = await registerUser(username, password);
+            const message = await registerUser(name, password);
             alert("Success: " + message);
             showPage('login-page');
-        } catch ( err) {
+        } catch (err){
             alert(err.message);
         }
 
     })
 })
 
+
+// Function to catch input values of login and then use the API login method to send to backend
+document.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.getElementById('login-user');
+
+
+    loginBtn.addEventListener('click', async () => {
+        const name = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+            const message = await loginUser(name, password);
+            alert("Success: " + message);
+            showPage('main-page');
+        } catch (err){
+            alert(err.message);
+        }
+    })
+})
 
