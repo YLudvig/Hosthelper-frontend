@@ -77,3 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
+
+// Function to log out from proifle
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.getElementById('logout-user');
+
+    logoutBtn.addEventListener('click', async () => {
+        showPage('login-page')
+    })
+})
+
