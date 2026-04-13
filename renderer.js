@@ -6,7 +6,9 @@
  * to expose Node.js functionality from the main process.
  */
 
-//Function to handle what is showed for user
+import { registerUser} from "./api.js";
+
+// Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
 // we make all but the selected page to swap to invisible, through this we get a fast SPA (Single Page Applciation) type experience
 function showPage(pageId){
@@ -21,7 +23,7 @@ function showPage(pageId){
 
 // This combined with the showPage function constitutes the routing logic for the application
 document.addEventListener('DOMContentLoaded', () => {
-    // When register link clicked we run the showpage function that makes all
+    // When register link clicked we run the showPage function that makes all
     // other sections invisible and leaves only the register section visible
     document.getElementById('register-link').addEventListener('click', (e) => {
         e.preventDefault();
@@ -33,5 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
         showPage('login-page');
     })
 
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const registerBtn = document.getElementById('register-user');
+
+    registerBtn.addEventListener('click', async () => {
+        const username = document.getElementById('register-username').value;
+        const password = document.getElementById('register-password').value;
+
+        try {
+            const message = await registerUser(username, password);
+            alert("Success: " + message);
+            showPage('login-page');
+        } catch ( err) {
+            alert(err.message);
+        }
+
+    })
 })
+
 
