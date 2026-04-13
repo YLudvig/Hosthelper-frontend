@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
     <link href="./styles.css" rel="stylesheet">
-    <title>Hello World!</title>
+    <title>Hosthelper</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
 
-    <h2>Test 123</h2>
-
+    <section id="login-page" class="view">
+      <h1>Log in to Hosthelper</h1>
+      <input type="text" placeholder="Username">
+      <input type="password" placeholder="Password">
+      <button>
+        Log in
+      </button>
+      <p>Don't have profile?
+        <a href="#" id="register-link">Register here</a>
+      </p>
+    </section>
 
     <script src="./renderer.js"></script>
   </body>
