@@ -163,8 +163,40 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('remote-ip').value = '';
             document.getElementById('remote-username').value = '';
             document.getElementById('remote-password').value = '';
+            // Fetches remotes
+            const remotes = await getAllRemotes();
+
+            // Checks return of getAllRemotes fetch and checks
+            // that it's a list and not empty to avoid breaking the rendering
+            if (Array.isArray(remotes) && remotes.length > 0){
+                // Render the fetched remotes
+                showRemotes(remotes);
+            } else {
+                console.log("No remotes in db for this user")
+            }
         } catch (err){
             alert(err.message);
+        }
+
+    })
+})
+
+
+// Function to refetch remotes on demand
+document.addEventListener('DOMContentLoaded', () => {
+    const refetchRemoteBtn = document.getElementById('refetch-remotes');
+
+    refetchRemoteBtn.addEventListener('click', async () =>{
+        // Fetches remotes
+        const remotes = await getAllRemotes();
+
+        // Checks return of getAllRemotes fetch and checks
+        // that it's a list and not empty to avoid breaking the rendering
+        if (Array.isArray(remotes) && remotes.length > 0){
+            // Render the fetched remotes
+            showRemotes(remotes);
+        } else {
+            console.log("No remotes in db for this user")
         }
     })
 })
