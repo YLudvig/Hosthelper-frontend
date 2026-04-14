@@ -48,22 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
 
-    registerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
 
-        const name = document.getElementById('register-username').value;
-        const password = document.getElementById('register-password').value;
+    if (registerForm){
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        try {
-            const message = await registerUser(name, password);
-            alert("Success: " + message);
-            registerForm.reset();
-            showPage('login-page');
-        } catch (err){
-            alert(err.message);
-        }
+            const name = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
 
-    })
+            try {
+                const message = await registerUser(name, password);
+                alert("Success: " + message);
+                registerForm.reset();
+                showPage('login-page');
+            } catch (err){
+                alert(err.message);
+            }
+        })
+    }
 })
 
 
@@ -71,19 +73,104 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
 
+    if(loginForm){
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+            const name = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
 
-        const name = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
+            try {
+                const message = await loginUser(name, password);
 
-        try {
-            const message = await loginUser(name, password);
+                // Set the userId in localstorage
+                localStorage.setItem('userId', message.userId);
 
-            // Set the userId in localstorage
-            localStorage.setItem('userId', message.userId);
+                // Fetches remotes
+                const remotes = await getAllRemotes();
 
+                // Checks return of getAllRemotes fetch and checks
+                // that it's a list and not empty to avoid breaking the rendering
+                if (Array.isArray(remotes) && remotes.length > 0){
+                    // Render the fetched remotes
+                    showRemotes(remotes);
+                } else {
+                    console.log("No remotes in db for this user")
+                }
+
+                // Alerts user of successful login and on closing the alert user is redirected to the main-page
+                alert("Success: " + message.message);
+                loginForm.reset();
+                showPage('main-page');
+            } catch (err){
+                alert(err.message);
+            }
+        })
+    }
+})
+
+
+// Function to handle hiding or showing the input form for creating remotes
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('btn-toggle-remoteform');
+    const remoteFormContainer = document.getElementById('remote-form-container');
+
+    if(toggleBtn){
+        toggleBtn.addEventListener('click', () => {
+            remoteFormContainer.classList.toggle('hidden');
+
+            if(remoteFormContainer.classList.contains('hidden')){
+                toggleBtn.textContent = 'Add New Remote';
+            } else {
+                toggleBtn.textContent = 'Minimize Remote Form'
+            }
+        })
+    }
+})
+
+
+// Function to add remotes to backend
+document.addEventListener('DOMContentLoaded', () => {
+    const remoteForm = document.getElementById('remote-form');
+
+    if(remoteForm){
+        remoteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nickname = document.getElementById('remote-nickname').value;
+            const ipAddress = document.getElementById('remote-ip').value;
+            const username = document.getElementById('remote-username').value;
+            const remotePassword = document.getElementById('remote-password').value;
+
+            try {
+                const message = await addRemote(nickname, ipAddress, username, remotePassword);
+                alert("Successfully added remote: " + message);
+                remoteForm.reset();
+                // Fetches remotes
+                const remotes = await getAllRemotes();
+
+                // Checks return of getAllRemotes fetch and checks
+                // that it's a list and not empty to avoid breaking the rendering
+                if (Array.isArray(remotes) && remotes.length > 0){
+                    // Render the fetched remotes
+                    showRemotes(remotes);
+                } else {
+                    console.log("No remotes in db for this user")
+                }
+            } catch (err){
+                alert(err.message);
+            }
+        })
+    }
+})
+
+
+// Function to refetch remotes on demand
+document.addEventListener('DOMContentLoaded', () => {
+    const refetchRemoteBtn = document.getElementById('refetch-remotes');
+
+    if(refetchRemoteBtn){
+        refetchRemoteBtn.addEventListener('click', async () =>{
             // Fetches remotes
             const remotes = await getAllRemotes();
 
@@ -95,17 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log("No remotes in db for this user")
             }
-
-            // Alerts user of successful login and on closing the alert user is redirected to the main-page
-            alert("Success: " + message.message);
-            loginForm.reset();
-            showPage('main-page');
-        } catch (err){
-            alert(err.message);
-        }
-    })
+        })
+    }
 })
-
 
 // Function to display fetched remotes on main page
 function showRemotes(remotes){
@@ -118,80 +197,40 @@ function showRemotes(remotes){
        div.innerHTML = `
             <h3>${remote.nickname}</h3>
             <p>${remote.ipAddress}</p>
-            <div id="terminal-${remote.id}" class="mini-terminal"></div>
+            <div class="commands">
+                <button class="ping-btn">
+                    Ping Remote
+                </button>
+            </div>
+            <pre id="terminal-${remote.remoteId}" class="mini-terminal"></pre>
        `;
        container.appendChild(div);
+
+       const pingBtn = div.querySelector('.ping-btn');
+       pingBtn.addEventListener('click', () => {
+           triggerCommand(remote.remoteId, `ping -c 4 ${remote.ipAddress}`);
+       })
+
+       window.api.onTerminalOutput(remote.remoteId, (textData) => {
+            const terminalElement = document.getElementById(`terminal-${remote.remoteId}`);
+            if (terminalElement) {
+                terminalElement.textContent += textData;
+            }
+       })
     });
 }
 
+// Sender that sends command to preload and then to main to be ran
+window.triggerCommand = (remoteId, fullCommand) => {
+    const remote = document.getElementById(`terminal-${remoteId}`);
 
-// Function to handle hiding or showing the input form for creating remotes
-document.addEventListener('DOMContentLoaded', () => {
-    const toggleBtn = document.getElementById('btn-toggle-remoteform');
-    const remoteFormContainer = document.getElementById('remote-form-container');
+    // Error handling for if no terminal
+    if (!remote){
+        console.error(`COuld not find terminal for ID: ${remoteId}`);
+        return;
+    }
 
-    toggleBtn.addEventListener('click', () => {
-        remoteFormContainer.classList.toggle('hidden');
+    remote.textContent = `> ${fullCommand}\n`;
+    window.api.sendCommand(remoteId, fullCommand);
+}
 
-        if(remoteFormContainer.classList.contains('hidden')){
-            toggleBtn.textContent = 'Add New Remote';
-        } else {
-            toggleBtn.textContent = 'Minimize Remote Form'
-        }
-    })
-})
-
-
-// Function to add remotes to backend
-document.addEventListener('DOMContentLoaded', () => {
-    const remoteForm = document.getElementById('remote-form');
-
-    remoteForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const nickname = document.getElementById('remote-nickname').value;
-        const ipAddress = document.getElementById('remote-ip').value;
-        const username = document.getElementById('remote-username').value;
-        const remotePassword = document.getElementById('remote-password').value;
-
-        try {
-            const message = await addRemote(nickname, ipAddress, username, remotePassword);
-            alert("Successfully added remote: " + message);
-            remoteForm.reset();
-            // Fetches remotes
-            const remotes = await getAllRemotes();
-
-            // Checks return of getAllRemotes fetch and checks
-            // that it's a list and not empty to avoid breaking the rendering
-            if (Array.isArray(remotes) && remotes.length > 0){
-                // Render the fetched remotes
-                showRemotes(remotes);
-            } else {
-                console.log("No remotes in db for this user")
-            }
-        } catch (err){
-            alert(err.message);
-        }
-
-    })
-})
-
-
-// Function to refetch remotes on demand
-document.addEventListener('DOMContentLoaded', () => {
-    const refetchRemoteBtn = document.getElementById('refetch-remotes');
-
-    refetchRemoteBtn.addEventListener('click', async () =>{
-        // Fetches remotes
-        const remotes = await getAllRemotes();
-
-        // Checks return of getAllRemotes fetch and checks
-        // that it's a list and not empty to avoid breaking the rendering
-        if (Array.isArray(remotes) && remotes.length > 0){
-            // Render the fetched remotes
-            showRemotes(remotes);
-        } else {
-            console.log("No remotes in db for this user")
-        }
-    })
-})

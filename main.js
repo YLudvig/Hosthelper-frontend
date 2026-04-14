@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
+const {ipcMain} = require('electron')
+const {spawn} = require('child_process')
 
 function createWindow () {
   // Create the browser window.
@@ -41,3 +43,44 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+
+// Function to run commands on remote and then pipe through the return which we send through preload and finally display using renderer.js
+// Handles each remote separately by using their remoteId
+ipcMain.on('execute-command', (event, {remoteId, commandString}) => {
+
+  // Usage of spawn somewhat requires breaking up commandstring for user to make it more user friendly for them
+  const parts = commandString.trim().split(/\s+/);
+  // The command
+  const cmd = parts [0];
+  // The argument
+  const args = parts.slice(1);
+
+  // Runs the command on remote
+  const child = spawn(cmd, args);
+
+  // Data handling
+  // By using spawn this data will be sent as a stream instead of dumped at once,
+  // this allows us to handle larger data amounts such as logs without risking crashes
+  child.stdout.on('data', (data) =>{
+    event.reply(`terminal-output-${remoteId}`, data.toString());
+  });
+
+  // Streams potential errors with commands
+  // Useful for debugging etc.
+  child.stderr.on('data', (data) => {
+    event.reply(`terminal-output-${remoteId}`, `ERROR: ${data.toString()}`);
+  });
+
+  // Handles end of command running/streaming
+  child.on('close', (code) => {
+    event.reply(`terminal-output-${remoteId}`, `\n[Process finished with code ${code}]\n`);
+  });
+
+  // Handles critical errors for system
+  child.on('error', (err) => {
+    event.reply(`terminal-output-${remoteId}`, `ERROR: ${err.message}`)
+  })
+
+
+})
