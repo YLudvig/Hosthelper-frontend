@@ -40,8 +40,18 @@
       <p>The intent is for this application to function as a convenient GUI to get an overview of your various devices and processes without having to
         ump between terminals and windows and look up your various SSH login information</p>
 
-      <div id="remote-container">
+      <button id="btn-toggle-remoteform">Add New Remote</button>
 
+      <div id="remote-form-container" class="hidden">
+        <h3>Register New Remote</h3>
+        <input type="text" id="remote-nickname" placeholder="Remotes nickname">
+        <input type="text" id="remote-ip" placeholder="Local network IP address for remote">
+        <input type="text" id="remote-username" placeholder="Username to SSH into remote">
+        <input type="text" id="remote-password" placeholder="Password to SSH into remote">
+        <button id="btn-submit-remote">Save Remote</button>
+      </div>
+
+      <div id="remote-container">
       </div>
 
       <button id="logout-user">

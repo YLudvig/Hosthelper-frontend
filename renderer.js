@@ -106,11 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
+
+// Function to display fetched remotes on main page
 function showRemotes(remotes){
     const container = document.getElementById('remote-container');
     container.innerHTML = '';
 
-    remotesList.forEach(remote => {
+    remotes.forEach(remote => {
        const div = document.createElement('div');
        div.className = 'remote-card';
        div.innerHTML = `
@@ -123,3 +125,18 @@ function showRemotes(remotes){
 }
 
 
+// Function to handle hiding or showing the input form for creating remotes
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('btn-toggle-remoteform');
+    const remoteFormContainer = document.getElementById('remote-form-container');
+
+    toggleBtn.addEventListener('click', () => {
+        remoteFormContainer.classList.toggle('hidden');
+
+        if(remoteFormContainer.classList.contains('hidden')){
+            toggleBtn.textContent = 'Add New Remote';
+        } else {
+            toggleBtn.textContent = 'Minimize Remote Form'
+        }
+    })
+})
