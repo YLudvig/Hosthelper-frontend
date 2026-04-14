@@ -7,7 +7,7 @@
  */
 
 import {loginUser, registerUser} from "./api.js";
-import {getAllRemotes} from "./apiRemote.js";
+import {addRemote, getAllRemotes} from "./apiRemote.js";
 
 // Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
@@ -116,8 +116,8 @@ function showRemotes(remotes){
        const div = document.createElement('div');
        div.className = 'remote-card';
        div.innerHTML = `
-            <h3>${remote.name}</h3>
-            <p>${remote.status}</p>
+            <h3>${remote.nickname}</h3>
+            <p>${remote.ipAddress}</p>
             <div id="terminal-${remote.id}" class="mini-terminal"></div>
        `;
        container.appendChild(div);
@@ -143,4 +143,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Function to add remotes to backend
+document.addEventListener('DOMContentLoaded', () => {
+    const addRemoteBtn = document.getElementById('btn-submit-remote');
 
+    addRemoteBtn.addEventListener('click', async () => {
+        const nickname = document.getElementById('remote-nickname').value;
+        const ipAddress = document.getElementById('remote-ip').value;
+        const username = document.getElementById('remote-username').value;
+        const remotePassword = document.getElementById('remote-password').value;
+
+        try {
+            const message = await addRemote(nickname, ipAddress, username, remotePassword);
+            alert("Successfully added remote: " + message);
+
+        } catch (err){
+            alert(err.message);
+        }
+    })
+})
