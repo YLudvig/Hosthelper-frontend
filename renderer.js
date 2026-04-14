@@ -201,20 +201,31 @@ function showRemotes(remotes){
                 <button class="ping-btn">
                     Ping Remote
                 </button>
+                <button class="clear-terminal-btn">
+                    Clear terminal for this remote
+                </button>
             </div>
             <pre id="terminal-${remote.remoteId}" class="mini-terminal"></pre>
        `;
        container.appendChild(div);
 
+       // Button to ping a remote and check that it responds
        const pingBtn = div.querySelector('.ping-btn');
        pingBtn.addEventListener('click', () => {
            triggerCommand(remote.remoteId, `ping -c 4 ${remote.ipAddress}`);
+       })
+
+        // Button to empty remotes terminal
+       const clearTerminalBtn = div.querySelector('.clear-terminal-btn');
+       clearTerminalBtn.addEventListener('click', () => {
+            clearTerminal(remote.remoteId);
        })
 
        window.api.onTerminalOutput(remote.remoteId, (textData) => {
             const terminalElement = document.getElementById(`terminal-${remote.remoteId}`);
             if (terminalElement) {
                 terminalElement.textContent += textData;
+                terminalElement.scrollTop = terminalElement.scrollHeight;
             }
        })
     });
@@ -225,12 +236,24 @@ window.triggerCommand = (remoteId, fullCommand) => {
     const remote = document.getElementById(`terminal-${remoteId}`);
 
     // Error handling for if no terminal
-    if (!remote){
-        console.error(`COuld not find terminal for ID: ${remoteId}`);
-        return;
+    if (remote){
+        remote.textContent += `\n ${fullCommand}\n`;
+        remote.scrollTop = remote.scrollHeight;
+        window.api.sendCommand(remoteId, fullCommand);
+    } else {
+        console.error(`Could not find terminal for ID: ${remoteId}`);
     }
 
-    remote.textContent = `> ${fullCommand}\n`;
-    window.api.sendCommand(remoteId, fullCommand);
 }
 
+// Function to clear a remotes terminal if user wishes to do so
+window.clearTerminal = (remoteId) => {
+    const terminal = document.getElementById(`terminal-${remoteId}`);
+
+    // Checks that it exists before doing anything
+    if (terminal) {
+        terminal.textContent = '>'
+    } else {
+        console.error('Could not find the terminal to empty');
+    }
+}
