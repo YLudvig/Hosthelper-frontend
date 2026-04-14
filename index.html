@@ -11,7 +11,9 @@
     <!--Section for the login page parts-->
     <section id="login-page" class="view">
       <h1>Log in to Hosthelper</h1>
+      <label for="login-username">Username</label>
       <input type="text" id="login-username" placeholder="Username">
+      <label for="login-password">Password</label>
       <input type="password" id="login-password" placeholder="Password">
       <button id="login-user">
         Log in
@@ -24,7 +26,9 @@
     <!--Section for the register page parts-->
     <section id="register-page" class="view" style="display: none;">
       <h1>Register</h1>
+      <label for="register-username">Username</label>
       <input type="text" id="register-username" placeholder="Username">
+      <label for="register-password">Password</label>
       <input type="password" id="register-password" placeholder="Password">
       <button id="register-user">
         Create profile/user
@@ -44,9 +48,13 @@
 
       <div id="remote-form-container" class="hidden">
         <h3>Register New Remote</h3>
-        <input type="text" id="remote-nickname" placeholder="Remotes nickname">
+        <label for="remote-nickname">Assign nickname to remote</label>
+        <input type="text" id="remote-nickname" placeholder="Remote nickname">
+        <label for="remote-ip">Remote ip</label>
         <input type="text" id="remote-ip" placeholder="Local network IP address for remote">
+        <label for="remote-username">Remote username</label>
         <input type="text" id="remote-username" placeholder="Username to SSH into remote">
+        <label for="remote-password">Remote password</label>
         <input type="text" id="remote-password" placeholder="Password to SSH into remote">
         <button id="btn-submit-remote">Save Remote</button>
       </div>
