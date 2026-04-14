@@ -11,13 +11,19 @@
     <!--Section for the login page parts-->
     <section id="login-page" class="view">
       <h1>Log in to Hosthelper</h1>
-      <label for="login-username">Username</label>
-      <input type="text" id="login-username" placeholder="Username">
-      <label for="login-password">Password</label>
-      <input type="password" id="login-password" placeholder="Password">
-      <button id="login-user">
-        Log in
-      </button>
+      <form id="login-form">
+        <div class="input-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="Username">
+        </div>
+        <div class="input-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Password">
+        </div>
+        <button id="login-user">
+          Log in
+        </button>
+      </form>
       <p>Don't have profile?
         <a href="#" id="register-link">Register here</a>
       </p>
@@ -26,17 +32,23 @@
     <!--Section for the register page parts-->
     <section id="register-page" class="view" style="display: none;">
       <h1>Register</h1>
-      <label for="register-username">Username</label>
-      <input type="text" id="register-username" placeholder="Username">
-      <label for="register-password">Password</label>
-      <input type="password" id="register-password" placeholder="Password">
-      <button id="register-user">
-        Create profile/user
-      </button>
+      <form id="register-form">
+        <div class="input-group">
+          <label for="register-username">Username</label>
+          <input type="text" id="register-username" placeholder="Username">
+        </div>
+        <div class="input-group">
+          <label for="register-password">Password</label>
+          <input type="password" id="register-password" placeholder="Password">
+        </div>
+        <button id="register-user">
+          Create profile/user
+        </button>
+      </form>
       <p><a href="#" id="login-link">Back to login page</a></p>
     </section>
 
-
+    <!--Section for main page-->
     <section id="main-page" class="view" style="display: none;">
       <h2>Hosthelper</h2>
       <h3>This app helps you monitor processes on your pc and on other computers on your local network</h3>
@@ -49,19 +61,30 @@
 
       <button id="btn-toggle-remoteform">Add New Remote</button>
 
-      <div id="remote-form-container" class="hidden">
-        <h3>Register New Remote</h3>
-        <label for="remote-nickname">Assign nickname to remote</label>
-        <input type="text" id="remote-nickname" placeholder="Remote nickname">
-        <label for="remote-ip">Remote ip</label>
-        <input type="text" id="remote-ip" placeholder="Local network IP address for remote">
-        <label for="remote-username">Remote username</label>
-        <input type="text" id="remote-username" placeholder="Username to SSH into remote">
-        <label for="remote-password">Remote password</label>
-        <input type="password" id="remote-password" placeholder="Password to SSH into remote">
-        <button id="btn-submit-remote">Save Remote</button>
-      </div>
+      <form id="remote-form">
+        <div id="remote-form-container" class="hidden">
+          <h3>Register New Remote</h3>
+          <div class="input-group">
+            <label for="remote-nickname">Assign nickname to remote</label>
+            <input type="text" id="remote-nickname" placeholder="Remote nickname">
+          </div>
+          <div class="input-group">
+            <label for="remote-ip">Remote ip</label>
+            <input type="text" id="remote-ip" placeholder="Local network IP address for remote">
+          </div>
+          <div class="input-group">
+            <label for="remote-username">Remote username</label>
+            <input type="text" id="remote-username" placeholder="Username to SSH into remote">
+          </div>
+          <div class="input-group">
+            <label for="remote-password">Remote password</label>
+            <input type="password" id="remote-password" placeholder="Password to SSH into remote">
+          </div>
+          <button id="btn-submit-remote">Save Remote</button>
+        </div>
+      </form>
 
+      <!--This lists out all your remotes, crucial part-->
       <div id="remote-container">
       </div>
 
