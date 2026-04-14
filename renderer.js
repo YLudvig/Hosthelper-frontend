@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const message = await registerUser(name, password);
             alert("Success: " + message);
+            document.getElementById('register-username').value= '';
+            document.getElementById('register-password').value= '';
             showPage('login-page');
         } catch (err){
             alert(err.message);
@@ -88,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Alerts user of successful login and on closing the alert user is redirected to the main-page
             alert("Success: " + message.message);
+            document.getElementById('login-username').value= '';
+            document.getElementById('login-password').value= '';
             showPage('main-page');
         } catch (err){
             alert(err.message);
@@ -155,7 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const message = await addRemote(nickname, ipAddress, username, remotePassword);
             alert("Successfully added remote: " + message);
-
+            document.getElementById('remote-nickname').value = '';
+            document.getElementById('remote-ip').value = '';
+            document.getElementById('remote-username').value = '';
+            document.getElementById('remote-password').value = '';
         } catch (err){
             alert(err.message);
         }
