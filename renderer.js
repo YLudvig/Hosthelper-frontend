@@ -34,24 +34,30 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('login-link').addEventListener('click', (e) => {
         e.preventDefault();
         showPage('login-page');
-    })
+    });
+
+    document.getElementById('logout-user').addEventListener('click', async () => {
+        localStorage.removeItem('userId');
+        showPage('login-page')
+    });
 
 });
 
 // Function to catch input values on register page and then use the API register
 // method to send that to backend and then display backend response
 document.addEventListener('DOMContentLoaded', () => {
-    const registerBtn = document.getElementById('register-user');
+    const registerForm = document.getElementById('register-form');
 
-    registerBtn.addEventListener('click', async () => {
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
         const name = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
 
         try {
             const message = await registerUser(name, password);
             alert("Success: " + message);
-            document.getElementById('register-username').value= '';
-            document.getElementById('register-password').value= '';
+            registerForm.reset();
             showPage('login-page');
         } catch (err){
             alert(err.message);
@@ -63,10 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to catch input values of login and then use the API login method to send to backend
 document.addEventListener('DOMContentLoaded', () => {
-    const loginBtn = document.getElementById('login-user');
+    const loginForm = document.getElementById('login-form');
 
 
-    loginBtn.addEventListener('click', async () => {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
         const name = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
@@ -90,23 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Alerts user of successful login and on closing the alert user is redirected to the main-page
             alert("Success: " + message.message);
-            document.getElementById('login-username').value= '';
-            document.getElementById('login-password').value= '';
+            loginForm.reset();
             showPage('main-page');
         } catch (err){
             alert(err.message);
         }
-    })
-})
-
-
-// Function to log out from profile
-document.addEventListener('DOMContentLoaded', () => {
-    const logoutBtn = document.getElementById('logout-user');
-
-    logoutBtn.addEventListener('click', async () => {
-        localStorage.removeItem('userId');
-        showPage('login-page')
     })
 })
 
@@ -148,9 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to add remotes to backend
 document.addEventListener('DOMContentLoaded', () => {
-    const addRemoteBtn = document.getElementById('btn-submit-remote');
+    const remoteForm = document.getElementById('remote-form');
 
-    addRemoteBtn.addEventListener('click', async () => {
+    remoteForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
         const nickname = document.getElementById('remote-nickname').value;
         const ipAddress = document.getElementById('remote-ip').value;
         const username = document.getElementById('remote-username').value;
@@ -159,10 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const message = await addRemote(nickname, ipAddress, username, remotePassword);
             alert("Successfully added remote: " + message);
-            document.getElementById('remote-nickname').value = '';
-            document.getElementById('remote-ip').value = '';
-            document.getElementById('remote-username').value = '';
-            document.getElementById('remote-password').value = '';
+            remoteForm.reset();
             // Fetches remotes
             const remotes = await getAllRemotes();
 
