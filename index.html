@@ -44,6 +44,9 @@
       <p>The intent is for this application to function as a convenient GUI to get an overview of your various devices and processes without having to
         ump between terminals and windows and look up your various SSH login information</p>
 
+
+      <button id="refetch-remotes">Refetch My Remotes</button>
+
       <button id="btn-toggle-remoteform">Add New Remote</button>
 
       <div id="remote-form-container" class="hidden">
@@ -55,7 +58,7 @@
         <label for="remote-username">Remote username</label>
         <input type="text" id="remote-username" placeholder="Username to SSH into remote">
         <label for="remote-password">Remote password</label>
-        <input type="text" id="remote-password" placeholder="Password to SSH into remote">
+        <input type="password" id="remote-password" placeholder="Password to SSH into remote">
         <button id="btn-submit-remote">Save Remote</button>
       </div>
 
