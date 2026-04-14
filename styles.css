@@ -43,3 +43,17 @@ button {
     cursor: pointer;
     margin-top: 10px;
 }
+
+
+/* Styled to look largely like anormal terminal */
+.mini-terminal {
+    background: black;
+    color: white;
+    padding: 10px;
+    height: 150px;
+    overflow-y: auto;
+    font-size: 12px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+}
+
