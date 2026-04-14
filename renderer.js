@@ -140,3 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 })
+
+
+// Function to add remotes to backend
+
