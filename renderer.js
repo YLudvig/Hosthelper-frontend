@@ -8,9 +8,11 @@
 
 import {loginUser, registerUser} from "./api.js";
 import {addRemote, editRemote, getAllRemotes, removeRemote} from "./apiRemote.js";
+import {addButton, editButton, getAllButtons} from "./apiButton.js";
 
 // Global list of currentRemotes, used for dropdown of remotes to edit
 let currentRemotes = [];
+let currentButtons = [];
 
 // Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
@@ -92,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Fetches remotes
                 const remotes = await getAllRemotes();
 
+                currentButtons = await getAllButtons();
+
                 // Checks return of getAllRemotes fetch and checks
                 // that it's a list and not empty to avoid breaking the rendering
                 if (Array.isArray(remotes) && remotes.length > 0){
@@ -99,6 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     showRemotes(remotes);
                 } else {
                     console.log("No remotes in db for this user")
+                }
+
+                if (Array.isArray(currentButtons) && currentButtons.length > 0){
+                    showButtons(currentButtons);
+                } else {
+                    console.log("No buttons in db for this user");
                 }
 
                 // Alerts user of successful login and on closing the alert user is redirected to the main-page
@@ -131,6 +141,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 })
 
+
+// Function to handle hiding or showing the input form for creating buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('btn-toggle-buttonform');
+    const buttonFormContainer = document.getElementById('button-form-container');
+
+    if(toggleBtn){
+        toggleBtn.addEventListener('click', () => {
+            buttonFormContainer.classList.toggle('hidden');
+
+            if(buttonFormContainer.classList.contains('hidden')){
+                toggleBtn.textContent = 'Add New Button';
+            } else {
+                toggleBtn.textContent = 'Minimize Button Form'
+            }
+        })
+    }
+})
+
 // Function to handle hiding or showing the input form for editing remotes
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('btn-toggle-editremoteform');
@@ -141,6 +170,24 @@ document.addEventListener('DOMContentLoaded', () => {
             remoteFormContainer.classList.toggle('hidden');
 
             if(remoteFormContainer.classList.contains('hidden')){
+                toggleBtn.textContent = 'Edit Existing Remote';
+            } else {
+                toggleBtn.textContent = 'Minimize Edit Remote Form'
+            }
+        })
+    }
+})
+
+// Function to handle hiding or showing the input form for editing buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('btn-toggle-editbuttonform');
+    const buttonFormContainer = document.getElementById('editbutton-form-container');
+
+    if(toggleBtn){
+        toggleBtn.addEventListener('click', () => {
+            buttonFormContainer.classList.toggle('hidden');
+
+            if(buttonFormContainer.classList.contains('hidden')){
                 toggleBtn.textContent = 'Edit Existing Remote';
             } else {
                 toggleBtn.textContent = 'Minimize Edit Remote Form'
@@ -216,7 +263,9 @@ function showRemotes(remotes){
     currentRemotes = remotes;
     const remotesDropdown = document.getElementById('remote-to-edit');
 
-    remotesDropdown.innerHTML = '<option value="""" disabled selected">Select a remote...</option>';
+    remotesDropdown.innerHTML = '<option value="" disabled selected">Select a remote...</option>';
+
+
 
     remotes.forEach(remote => {
        const div = document.createElement('div');
@@ -250,7 +299,7 @@ function showRemotes(remotes){
        `;
        container.appendChild(div);
 
-       // Dropdown
+       // Dropdown for remote
         const option = document.createElement('option');
         option.value = remote.remoteId;
         option.textContent = remote.nickname;
@@ -325,6 +374,22 @@ function showRemotes(remotes){
     });
 }
 
+function showButtons(buttons){
+    currentButtons = buttons;
+    const buttonsDropdown = document.getElementById('button-to-edit');
+
+    if (!buttonsDropdown) return;
+
+    buttonsDropdown.innerHTML = '<option value="" disabled selected>Select a button to edit...</option>'
+
+    buttons.forEach(button => {
+        const option = document.createElement('option');
+        option.value = button.buttonId;
+        option.textContent = button.buttonName;
+        buttonsDropdown.appendChild(option);
+    })
+}
+
 
 // Dropdown/edit listener
 document.addEventListener('DOMContentLoaded', () => {
@@ -376,6 +441,97 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 })
+
+
+// Function to add buttons to backend
+document.addEventListener('DOMContentLoaded', () => {
+    const buttonForm = document.getElementById('button-form');
+
+    if(buttonForm){
+        buttonForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const buttonName = document.getElementById('button-buttonName').value;
+            const command = document.getElementById('button-command').value;
+
+
+            try {
+                const message = await addButton(buttonName, command);
+                alert("Successfully added button: " + message.buttonName);
+                buttonForm.reset();
+
+                // Fetches buttons
+                const buttons = await getAllButtons();
+
+                currentButtons = buttons;
+
+                showButtons(buttons);
+
+                const remotes = await getAllRemotes();
+
+                // Checks return of getAllRemotes fetch and checks
+                // that it's a list and not empty to avoid breaking the rendering
+                if (Array.isArray(buttons) && buttons.length > 0 && Array.isArray(remotes) && remotes.length > 0){
+                    // Render the fetched remotes
+                    showRemotes(remotes);
+                } else {
+                    console.log("No buttons in db for this user")
+                }
+            } catch (err){
+                alert(err.message);
+            }
+        })
+    }
+})
+
+
+// Dropdown/edit listener for edit buttons
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Find selected remote and render auto fill that remotes value in the editable inputs
+    const selectedForEdit = document.getElementById('button-to-edit');
+
+    if (selectedForEdit){
+        selectedForEdit.addEventListener('change', (e) => {
+            const selectedId = e.target.value;
+
+            // Loops through remotes and finds matching remote by remoteId
+            const button = currentButtons.find(r => r.buttonId === selectedId);
+
+            if (button) {
+                document.getElementById('editbutton-buttonName').value = button.buttonName;
+                document.getElementById('editbutton-command').value = button.command;
+            }
+        })
+    }
+
+    // Submission of edits made
+    const editForm = document.getElementById('editbutton-form');
+    if (editForm){
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const buttonId = document.getElementById('button-to-edit').value;
+
+            const updatedButton = {
+                buttonName: document.getElementById('editbutton-buttonName').value,
+                command: document.getElementById('editbutton-command').value,
+
+            };
+
+            try {
+                const response = await editButton(buttonId, updatedButton);
+                alert(response.message);
+                currentButtons = await getAllButtons();
+                const refreshremotes = await getAllRemotes();
+                showRemotes(refreshremotes);
+            } catch (err){
+                alert(err.message);
+            }
+        })
+    }
+})
+
 
 
 // Sender that sends command to preload and then to main to be ran
