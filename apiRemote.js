@@ -59,3 +59,31 @@ export async function removeRemote(remoteId){
 
     return data.message;
 }
+
+
+// Function to send edited remotes
+export async function editRemote(remoteId, updatedRemote){
+
+    const payload = {userId: localStorage.getItem('userId'),
+                        nickname: updatedRemote.nickname,
+                        ipAddress: updatedRemote.ipAddress,
+                        port: 22,
+                        username: updatedRemote.username,
+                        remotePassword : updatedRemote.remotePassword};
+
+    const response = await fetch(`${remoteURL}/update/${remoteId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    })
+
+    const data = await response.json();
+
+    // Error handling
+    if(!response.ok){
+        throw new Error(data.message || 'Failed to edit remote');
+    }
+
+    return data;
+
+}
