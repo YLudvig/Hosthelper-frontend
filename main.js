@@ -45,12 +45,41 @@ app.on('window-all-closed', function () {
 // code. You can also put them in separate files and require them here.
 
 
+// List to keep check of what remotes are currently SSH:d into
+const sshdRemotes = {};
+
 // Function to run commands on remote and then pipe through the return which we send through preload and finally display using renderer.js
 // Handles each remote separately by using their remoteId
 ipcMain.on('execute-command', (event, {remoteId, commandString}) => {
 
+  const commandStringSet = String(commandString);
+
+  // Needed for ssh into the remote to work
+  if (commandStringSet.startsWith('ssh-init')) {
+    const target = commandStringSet.split(' ')[1];
+
+    const child = spawn('ssh', ['-tt', '-o', 'StrictHostKeyChecking=no', target]);
+    sshdRemotes[remoteId] = child;
+
+    child.stdout.on('data', (data) => event.reply(`terminal-output-${remoteId}`, data.toString()));
+    child.stderr.on('data', (data) => event.reply(`terminal-output-${remoteId}`, data.toString()));
+
+    child.on('close', (code) => {
+      delete sshdRemotes[remoteId];
+      event.reply(`terminal-output-${remoteId}`, `\n[SSH Session Closed with ${code}`);
+    });
+    return;
+  }
+
+  // If active ssh'd into that remote command is ran in that ssh instead of on local pc
+  if (sshdRemotes[remoteId]){
+    sshdRemotes[remoteId].stdin.write(commandStringSet + '\n');
+    return;
+  }
+
+
   // Usage of spawn somewhat requires breaking up commandstring for user to make it more user friendly for them
-  const parts = commandString.trim().split(/\s+/);
+  const parts = commandStringSet.trim().split(/\s+/);
   // The command
   const cmd = parts [0];
   // The argument
