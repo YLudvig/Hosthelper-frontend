@@ -21,11 +21,11 @@ export async function getAllRemotes(){
     return await response.json();
 }
 
-export async function addRemote(nickname, ipAddress, username, remotePassword) {
+export async function addRemote(nickname, description, ipAddress, username, remotePassword) {
     const userId = localStorage.getItem('userId');
     const port = 22;
 
-    const payload = {userId, nickname, ipAddress, port, username, remotePassword};
+    const payload = {userId, nickname, description, ipAddress, port, username, remotePassword};
 
     const response = await fetch(`${remoteURL}/add`, {
         method: 'POST',
@@ -66,6 +66,7 @@ export async function editRemote(remoteId, updatedRemote){
 
     const payload = {userId: localStorage.getItem('userId'),
                         nickname: updatedRemote.nickname,
+                        description: updatedRemote.description,
                         ipAddress: updatedRemote.ipAddress,
                         port: 22,
                         username: updatedRemote.username,

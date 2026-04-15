@@ -159,12 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             const nickname = document.getElementById('remote-nickname').value;
+            const description = document.getElementById('remote-description').value;
             const ipAddress = document.getElementById('remote-ip').value;
             const username = document.getElementById('remote-username').value;
             const remotePassword = document.getElementById('remote-password').value;
 
             try {
-                const message = await addRemote(nickname, ipAddress, username, remotePassword);
+                const message = await addRemote(nickname, description, ipAddress, username, remotePassword);
                 alert("Successfully added remote: " + message.nickname);
                 remoteForm.reset();
                 // Fetches remotes
@@ -222,6 +223,7 @@ function showRemotes(remotes){
        div.className = 'remote-card';
        div.innerHTML = `
             <h3>${remote.nickname}</h3>
+            <h4>${remote.description}</h4>
             <p>${remote.ipAddress}</p>
             <button class="delete-remote-btn">Delete remote</button>
             <div class="commands">
@@ -339,6 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (remote) {
                 document.getElementById('editremote-nickname').value = remote.nickname;
+                document.getElementById('editremote-description').value = remote.description;
                 document.getElementById('editremote-ip').value = remote.nickname;
                 document.getElementById('editremote-username').value = remote.username;
                 document.getElementById('editremote-password').value = remote.remotePassword;
@@ -356,6 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const updatedRemote = {
                 nickname: document.getElementById('editremote-nickname').value,
+                description: document.getElementById('editremote-description').value,
                 ipAddress: document.getElementById('editremote-ip').value,
                 username: document.getElementById('editremote-username').value,
                 remotePassword: document.getElementById('editremote-password').value
