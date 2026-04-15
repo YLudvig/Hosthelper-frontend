@@ -2,3 +2,4 @@
 
 export const authURL = 'http://localhost:8080/api/auth';
 export const remoteURL = 'http://localhost:8080/api/remote';
+export const buttonUrl = 'http://localhost:8080/api/button';

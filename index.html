@@ -63,6 +63,10 @@
 
       <button id="btn-toggle-editremoteform">Edit Existing Remote</button>
 
+      <button id="btn-toggle-buttonform">Add New Button</button>
+
+      <button id="btn-toggle-editbuttonform">Edit Existing Button</button>
+
       <form id="remote-form">
         <div id="remote-form-container" class="hidden">
           <h3>Register New Remote</h3>
@@ -120,6 +124,42 @@
             <input type="text" id="editremote-password" placeholder="Password to SSH into remote">
           </div>
           <button id="btn-submit-editremote">Save Remote</button>
+        </div>
+      </form>
+
+      <form id="button-form">
+        <div id="button-form-container" class="hidden">
+          <h3>Register New Button</h3>
+          <div class="input-group">
+            <label for="button-buttonName">Assign name to button</label>
+            <input type="text" id="button-buttonName" placeholder="Button name">
+          </div>
+          <div class="input-group">
+            <label for="button-command">Command</label>
+            <input type="text" id="button-command" placeholder="Command">
+          </div>
+          <button id="btn-submit-button">Save Button</button>
+        </div>
+      </form>
+
+      <form id="editbutton-form">
+        <div id="editbutton-form-container" class="hidden">
+          <h3>Edit Existing Button</h3>
+          <div class="input-group">
+            <label for="button-to-edit">Select button to edit</label>
+            <select id="button-to-edit">
+              <option value="" disabled selected>Select a button...</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="editbutton-buttonName">Select button to edit</label>
+            <input type="text" id="editbutton-buttonName" placeholder="Button name">
+          </div>
+          <div class="input-group">
+            <label for="editbutton-command">Select button to edit</label>
+            <input type="text" id="editbutton-command" placeholder="Buttons command">
+          </div>
+          <button id="btn-submit-editbutton">Save Button</button>
         </div>
       </form>
 
