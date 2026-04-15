@@ -7,7 +7,10 @@
  */
 
 import {loginUser, registerUser} from "./api.js";
-import {addRemote, getAllRemotes, removeRemote} from "./apiRemote.js";
+import {addRemote, editRemote, getAllRemotes, removeRemote} from "./apiRemote.js";
+
+// Global list of currentRemotes, used for dropdown of remotes to edit
+let currentRemotes = [];
 
 // Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
@@ -128,6 +131,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 })
 
+// Function to handle hiding or showing the input form for editing remotes
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('btn-toggle-editremoteform');
+    const remoteFormContainer = document.getElementById('editremote-form-container');
+
+    if(toggleBtn){
+        toggleBtn.addEventListener('click', () => {
+            remoteFormContainer.classList.toggle('hidden');
+
+            if(remoteFormContainer.classList.contains('hidden')){
+                toggleBtn.textContent = 'Edit Existing Remote';
+            } else {
+                toggleBtn.textContent = 'Minimize Edit Remote Form'
+            }
+        })
+    }
+})
+
 
 // Function to add remotes to backend
 document.addEventListener('DOMContentLoaded', () => {
@@ -191,13 +212,18 @@ function showRemotes(remotes){
     const container = document.getElementById('remote-container');
     container.innerHTML = '';
 
+    currentRemotes = remotes;
+    const remotesDropdown = document.getElementById('remote-to-edit');
+
+    remotesDropdown.innerHTML = '<option value="""" disabled selected">Select a remote...</option>';
+
     remotes.forEach(remote => {
        const div = document.createElement('div');
        div.className = 'remote-card';
        div.innerHTML = `
             <h3>${remote.nickname}</h3>
-            <button class="delete-remote-btn">Delete remote</button>
             <p>${remote.ipAddress}</p>
+            <button class="delete-remote-btn">Delete remote</button>
             <div class="commands">
                 <button class="ping-btn">
                     Ping Remote
@@ -209,6 +235,12 @@ function showRemotes(remotes){
             <pre id="terminal-${remote.remoteId}" class="mini-terminal"></pre>
        `;
        container.appendChild(div);
+
+       // Dropdown
+        const option = document.createElement('option');
+        option.value = remote.remoteId;
+        option.textContent = remote.nickname;
+        remotesDropdown.appendChild(option);
 
        // Button to ping a remote and check that it responds
        const pingBtn = div.querySelector('.ping-btn');
@@ -234,7 +266,7 @@ function showRemotes(remotes){
 
                    await removeRemote(remote.remoteId);
 
-                   alert(`Remote deleted, ${remote.nickname}`);
+                   alert(`Remote deleted ${remote.nickname}`);
 
                    const remotes = await getAllRemotes();
                    showRemotes(remotes);
@@ -254,6 +286,57 @@ function showRemotes(remotes){
        })
     });
 }
+
+
+// Dropdown/edit listener
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Find selected remote and render auto fill that remotes value in the editable inputs
+    const selectedForEdit = document.getElementById('remote-to-edit');
+
+    if (selectedForEdit){
+        selectedForEdit.addEventListener('change', (e) => {
+            const selectedId = e.target.value;
+
+            // Loops through remotes and finds matching remote by remoteId
+            const remote = currentRemotes.find(r => r.remoteId === selectedId);
+
+            if (remote) {
+                document.getElementById('editremote-nickname').value = remote.nickname;
+                document.getElementById('editremote-ip').value = remote.nickname;
+                document.getElementById('editremote-username').value = remote.username;
+                document.getElementById('editremote-password').value = remote.remotePassword;
+            }
+        })
+    }
+
+    // Submission of edits made
+    const editForm = document.getElementById('editremote-form');
+    if (editForm){
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const remoteId = document.getElementById('remote-to-edit').value;
+
+            const updatedRemote = {
+                nickname: document.getElementById('editremote-nickname').value,
+                ipAddress: document.getElementById('editremote-ip').value,
+                username: document.getElementById('editremote-username').value,
+                remotePassword: document.getElementById('editremote-password').value
+            };
+
+            try {
+                const response = await editRemote(remoteId, updatedRemote);
+                alert(response.message);
+                const refreshremotes = await getAllRemotes();
+                showRemotes(refreshremotes);
+            } catch (err){
+                alert(err.message);
+            }
+        })
+    }
+})
+
 
 // Sender that sends command to preload and then to main to be ran
 window.triggerCommand = (remoteId, fullCommand) => {
