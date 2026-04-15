@@ -7,7 +7,7 @@
  */
 
 import {loginUser, registerUser} from "./api.js";
-import {addRemote, getAllRemotes} from "./apiRemote.js";
+import {addRemote, getAllRemotes, removeRemote} from "./apiRemote.js";
 
 // Function to handle what is shown for user
 // We essentially have all sections have the view tag, when a redirect is made
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const message = await addRemote(nickname, ipAddress, username, remotePassword);
-                alert("Successfully added remote: " + message);
+                alert("Successfully added remote: " + message.nickname);
                 remoteForm.reset();
                 // Fetches remotes
                 const remotes = await getAllRemotes();
@@ -196,6 +196,7 @@ function showRemotes(remotes){
        div.className = 'remote-card';
        div.innerHTML = `
             <h3>${remote.nickname}</h3>
+            <button class="delete-remote-btn">Delete remote</button>
             <p>${remote.ipAddress}</p>
             <div class="commands">
                 <button class="ping-btn">
@@ -203,7 +204,7 @@ function showRemotes(remotes){
                 </button>
                 <button class="clear-terminal-btn">
                     Clear terminal for this remote
-                </button>
+                </button>    
             </div>
             <pre id="terminal-${remote.remoteId}" class="mini-terminal"></pre>
        `;
@@ -220,6 +221,29 @@ function showRemotes(remotes){
        clearTerminalBtn.addEventListener('click', () => {
             clearTerminal(remote.remoteId);
        })
+
+        // Button to delete remote
+       const deleteRemoteBtn = div.querySelector('.delete-remote-btn');
+       deleteRemoteBtn.addEventListener('click', async () => {
+           // Asks user to confirm before deleting the remote
+           const confirmed = confirm(`Confirm deletion of ${remote.nickname}?`)
+
+           if (confirmed) {
+               // If user confirms the deletion we remove the remote and refetch remotes and rerender the remotes
+               try {
+
+                   await removeRemote(remote.remoteId);
+
+                   alert(`Remote deleted, ${remote.nickname}`);
+
+                   const remotes = await getAllRemotes();
+                   showRemotes(remotes);
+                   // Display error if deletion runs into problem
+               } catch (err) {
+                   alert(`Error occurred when attempting to delete: ${err.message}`)
+               }
+           }
+       });
 
        window.api.onTerminalOutput(remote.remoteId, (textData) => {
             const terminalElement = document.getElementById(`terminal-${remote.remoteId}`);
