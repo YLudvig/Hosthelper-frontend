@@ -14,13 +14,14 @@ export async function registerUser(name, password){
         body: JSON.stringify(payload)
     });
 
+    const data = await response.json();
+
     // Error handling
     if(!response.ok){
-        const error = await response.text();
-        throw new Error(error || 'Registration failed');
+        throw new Error(data.message || 'Registration failed');
     }
 
-    return await response.text();
+    return data.message;
 }
 
 
@@ -36,11 +37,12 @@ export async function loginUser(name, password){
         body: JSON.stringify(payload)
     });
 
+    const data = await response.json();
+
     // Error handling
     if(!response.ok){
-        const error = await response.json();
-        throw new Error(error.message || 'Login failed');
+        throw new Error(data.message || 'Login failed');
     }
 
-    return await response.json();
+    return data;
 }
