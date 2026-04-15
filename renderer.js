@@ -265,8 +265,6 @@ function showRemotes(remotes){
 
     remotesDropdown.innerHTML = '<option value="" disabled selected">Select a remote...</option>';
 
-
-
     remotes.forEach(remote => {
        const div = document.createElement('div');
        div.className = 'remote-card';
@@ -294,9 +292,25 @@ function showRemotes(remotes){
                 <button class="exit-remote-btn">
                     Exit Remote
                 </button>
+                <div class="custom-buttons"></div>
             </div>
             <pre id="terminal-${remote.remoteId}" class="mini-terminal"></pre>
        `;
+
+       const customBtnContainer = div.querySelector('.custom-buttons');
+
+       currentButtons.forEach(btnData => {
+           const btn = document.createElement('button');
+           btn.textContent = btnData.buttonName;
+           btn.className = 'custom-command-btn';
+
+           btn.addEventListener('click', () =>{
+               triggerCommand(remote.remoteId, btnData.command);
+           })
+
+           customBtnContainer.appendChild(btn);
+       });
+
        container.appendChild(div);
 
        // Dropdown for remote
