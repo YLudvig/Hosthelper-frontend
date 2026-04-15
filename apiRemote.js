@@ -1,3 +1,5 @@
+import {remoteURL} from "./apiURLs.js";
+
 // File for the remote API calls
 
 export async function getAllRemotes(){
@@ -5,7 +7,7 @@ export async function getAllRemotes(){
     const userId = localStorage.getItem('userId');
 
     // Sending the data to backend mapping
-    const response = await fetch(`http://localhost:8080/api/remote/getRemotes/${userId}`, {
+    const response = await fetch(`${remoteURL}/getRemotes/${userId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'}
     });
@@ -25,7 +27,7 @@ export async function addRemote(nickname, ipAddress, username, remotePassword) {
 
     const payload = {userId, nickname, ipAddress, port, username, remotePassword};
 
-    const response = await fetch('http://localhost:8080/api/remote/add', {
+    const response = await fetch(`${remoteURL}/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
