@@ -188,9 +188,9 @@ document.addEventListener('DOMContentLoaded', () => {
             buttonFormContainer.classList.toggle('hidden');
 
             if(buttonFormContainer.classList.contains('hidden')){
-                toggleBtn.textContent = 'Edit Existing Remote';
+                toggleBtn.textContent = 'Edit Existing Button';
             } else {
-                toggleBtn.textContent = 'Minimize Edit Remote Form'
+                toggleBtn.textContent = 'Minimize Edit Button Form'
             }
         })
     }
@@ -263,7 +263,7 @@ function showRemotes(remotes){
     currentRemotes = remotes;
     const remotesDropdown = document.getElementById('remote-to-edit');
 
-    remotesDropdown.innerHTML = '<option value="" disabled selected">Select a remote...</option>';
+    remotesDropdown.innerHTML = '<option value="" disabled selected>Select a remote...</option>';
 
     remotes.forEach(remote => {
        const div = document.createElement('div');
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedForEdit = document.getElementById('remote-to-edit');
 
     if (selectedForEdit){
-        selectedForEdit.addEventListener('change', (e) => {
+        selectedForEdit.addEventListener('input', (e) => {
             const selectedId = e.target.value;
 
             // Loops through remotes and finds matching remote by remoteId
@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (remote) {
                 document.getElementById('editremote-nickname').value = remote.nickname;
                 document.getElementById('editremote-description').value = remote.description;
-                document.getElementById('editremote-ip').value = remote.nickname;
+                document.getElementById('editremote-ip').value = remote.ipAddress;
                 document.getElementById('editremote-username').value = remote.username;
                 document.getElementById('editremote-password').value = remote.remotePassword;
             }
@@ -447,6 +447,9 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await editRemote(remoteId, updatedRemote);
                 alert(response.message);
+
+                editForm.reset();
+
                 const refreshremotes = await getAllRemotes();
                 showRemotes(refreshremotes);
             } catch (err){
@@ -506,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedForEdit = document.getElementById('button-to-edit');
 
     if (selectedForEdit){
-        selectedForEdit.addEventListener('change', (e) => {
+        selectedForEdit.addEventListener('input', (e) => {
             const selectedId = e.target.value;
 
             // Loops through remotes and finds matching remote by remoteId
@@ -537,6 +540,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await editButton(buttonId, updatedButton);
                 alert(response.message);
                 currentButtons = await getAllButtons();
+                showButtons(currentButtons);
+
+                editForm.reset();
                 const refreshremotes = await getAllRemotes();
                 showRemotes(refreshremotes);
             } catch (err){
