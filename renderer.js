@@ -230,7 +230,19 @@ function showRemotes(remotes){
                 </button>
                 <button class="clear-terminal-btn">
                     Clear terminal for this remote
+                </button>
+                <button class="ssh-connect-btn">
+                    Connect to remote with SSH
+                </button>
+                <button class="check-processes-btn">
+                    Check processes and ports
                 </button>    
+                <button class="check-docker-processes-btn">
+                    Check Docker Processes
+                </button>
+                <button class="exit-remote-btn">
+                    Exit Remote
+                </button>
             </div>
             <pre id="terminal-${remote.remoteId}" class="mini-terminal"></pre>
        `;
@@ -247,6 +259,30 @@ function showRemotes(remotes){
        pingBtn.addEventListener('click', () => {
            triggerCommand(remote.remoteId, `ping -c 4 ${remote.ipAddress}`);
        })
+
+        // Adds functionality to the SSH button
+        const sshBtn = div.querySelector('.ssh-connect-btn');
+       sshBtn.addEventListener('click', () => {
+           triggerCommand(remote.remoteId, `ssh-init ${remote.username}@${remote.ipAddress}`);
+       })
+
+        // Adds functionality so that the default processes button works
+        const processBtn = div.querySelector('.check-processes-btn');
+       processBtn.addEventListener('click', () => {
+           triggerCommand(remote.remoteId, `ss -tulpn`)
+       })
+
+        // Adds functionality so that the default processes button works
+        const dockerProcessBtn = div.querySelector('.check-docker-processes-btn');
+        dockerProcessBtn.addEventListener('click', () => {
+            triggerCommand(remote.remoteId, `docker ps`)
+        })
+
+        // Adds functionality so that the default processes button works
+        const exitRemoteBtn = div.querySelector('.exit-remote-btn');
+        exitRemoteBtn.addEventListener('click', () => {
+            triggerCommand(remote.remoteId, `exit`)
+        })
 
         // Button to empty remotes terminal
        const clearTerminalBtn = div.querySelector('.clear-terminal-btn');
