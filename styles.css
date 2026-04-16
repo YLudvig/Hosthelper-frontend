@@ -26,6 +26,7 @@ body {
     margin: 20px 0;
     padding: 20px;
     border: 1px solid #ddd;
+    border-radius: 4px;
     background: #f9f9f9
 }
 
@@ -83,6 +84,7 @@ button {
     width: 100%;
     margin: 0 auto;
     border: 2px solid black;
+    border-radius: 4px;
     background-color: white;
     padding: 30px;
 }
@@ -90,12 +92,13 @@ button {
 
 /* Styling for register page */
 #register-page{
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 4px;
+    color: black;
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
-    background-color: white;
-    color: black;
-    border: 2px solid black;
 }
 
 #register-page h1{
@@ -108,6 +111,7 @@ button {
 #register-user {
     background-color: black;
     border:none;
+    border-radius: 4px;
     color: white;
     cursor: pointer;
     font-weight: bold;
@@ -134,12 +138,13 @@ button {
 
 /* Styling for register page */
 #login-page{
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
     background-color: white;
-    color: black;
     border: 2px solid black;
+    border-radius: 4px;
+    color: black;
+    margin: 50px auto;
+    max-width: 400px;
+    padding: 20px;
 }
 
 #login-page h1{
@@ -151,10 +156,11 @@ button {
 
 #login-user {
     background-color: black;
+    border:none;
+    border-radius: 4px;
     color: white;
     cursor: pointer;
     font-weight: bold;
-    margin-top: 0;
     padding: 12px;
     transition: background-color 0.2s;
     width: 100%;
@@ -166,6 +172,7 @@ button {
 
 #register-link {
     border-bottom: 1px solid #2ecc71;
+    border-radius: 4px;
     color: black;
     font-size:0.9rem;
 }
@@ -178,6 +185,7 @@ button {
 #main-page{
     background-color: white;
     border: 1px solid black;
+    border-radius: 4px;
     color: black;
     margin: 20px auto;
     max-width: 800px;
@@ -199,6 +207,7 @@ button {
 #main-page > button {
     background-color: white;
     border: 1px solid black;
+    border-radius: 4px;
     color: black;
     cursor: pointer;
     font-weight: bold;
@@ -216,6 +225,7 @@ button {
 
 input[type="text"], select {
     border: 2px solid #000000;
+    border-radius: 4px;
     box-sizing: border-box;
     padding: 10px;
     width: 100%;
@@ -241,6 +251,7 @@ input:focus, select:focus{
 #logout-user {
     background-color: white;
     border:1px solid black;
+    border-radius: 4px;
     color: black;
     cursor: pointer;
     font-weight: bold;
@@ -285,6 +296,7 @@ input:focus, select:focus{
 .custom-command-btn {
     background-color: white !important;
     border: 1px solid black !important;
+    border-radius: 4px;
     color: black !important;
     cursor: pointer;
     font-size: 0.7rem;
