@@ -157,3 +157,62 @@ button {
 }
 
 
+#main-page{
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 30px;
+}
+
+#main-page h2 {
+    border-bottom: 4px solid #2ecc71;
+    display: inline-block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#main-page h3 {
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: normal;
+    margin: 5px 0;
+}
+
+#main-page > button {
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px 2px;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+#main-page > button:hover {
+    border-color: #2ecc71;
+    color: #2ecc71;
+}
+
+form {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+input[type="text"], select {
+    border: 2px solid #000000;
+    box-sizing: border-box;
+    padding: 10px;
+    width: 100%;
+}
+
+input:focus, select:focus{
+    outline: none;
+    border-color: #2ecc71;
+}
+
