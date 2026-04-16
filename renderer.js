@@ -269,18 +269,18 @@ function showRemotes(remotes){
        const div = document.createElement('div');
        div.className = 'remote-card';
        div.innerHTML = `
-            <h3>${remote.nickname}<button class="delete-remote-btn">Delete remote</button></h3>
+            <h3>${remote.nickname}<button class="delete-remote-btn local-only">Delete remote</button></h3>
             
             <h4>${remote.description}</h4>
             <p>${remote.ipAddress}</p>
             <div class="commands">
-                <button class="ping-btn">
+                <button class="ping-btn local-only">
                     Ping Remote
                 </button>
                 <button class="clear-terminal-btn">
                     Clear terminal
                 </button>
-                <button class="ssh-connect-btn">
+                <button class="ssh-connect-btn local-only">
                     SSH to remote
                 </button>
                 <button class="check-processes-btn">
@@ -289,7 +289,7 @@ function showRemotes(remotes){
                 <button class="check-docker-processes-btn">
                     Docker Processes
                 </button>
-                <button class="exit-remote-btn">
+                <button class="exit-remote-btn ssh-only hidden">
                     Exit Remote
                 </button>
                 <div class="custom-buttons"></div>
@@ -580,3 +580,27 @@ window.clearTerminal = (remoteId) => {
         console.error('Could not find the terminal to empty');
     }
 }
+
+
+window.api.onSshStatusChange(({remoteId, active}) => {
+    const container = document.getElementById('remote-container');
+    const cards = container.querySelectorAll('.remote-card');
+
+    const targetCard = Array.from(cards).find(card =>
+        card.querySelector(`#terminal-${remoteId}`)
+    )
+
+    if (targetCard){
+        const localButtons = targetCard.querySelectorAll('.local-only');
+        const sshButtons = targetCard.querySelectorAll('.ssh-only');
+
+        if (active) {
+            localButtons.forEach(btn => btn.classList.add('hidden'));
+            sshButtons.forEach(btn => btn.classList.remove('hidden'));
+        } else {
+            localButtons.forEach(btn => btn.classList.remove('hidden'));
+            sshButtons.forEach(btn => btn.classList.add('hidden'));
+        }
+    }
+
+})

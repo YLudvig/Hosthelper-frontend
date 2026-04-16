@@ -35,5 +35,9 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.removeAllListeners(channel);
 
     ipcRenderer.on(channel, (event,data) => callback(data));
+  },
+
+  onSshStatusChange: (callback) => {
+    ipcRenderer.on('ssh-status', (event, data) => callback(data));
   }
 })

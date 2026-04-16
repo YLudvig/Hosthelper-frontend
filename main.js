@@ -61,11 +61,14 @@ ipcMain.on('execute-command', (event, {remoteId, commandString}) => {
     const child = spawn('ssh', ['-tt', '-o', 'StrictHostKeyChecking=no', target]);
     sshdRemotes[remoteId] = child;
 
+    event.reply('ssh-status', {remoteId, active: true});
+
     child.stdout.on('data', (data) => event.reply(`terminal-output-${remoteId}`, data.toString()));
     child.stderr.on('data', (data) => event.reply(`terminal-output-${remoteId}`, data.toString()));
 
     child.on('close', (code) => {
       delete sshdRemotes[remoteId];
+      event.reply('ssh-status', {remoteId, active: false});
       event.reply(`terminal-output-${remoteId}`, `\nSSH Session Closed with ${code}`);
     });
     return;
