@@ -269,25 +269,25 @@ function showRemotes(remotes){
        const div = document.createElement('div');
        div.className = 'remote-card';
        div.innerHTML = `
-            <h3>${remote.nickname}</h3>
+            <h3>${remote.nickname}<button class="delete-remote-btn">Delete remote</button></h3>
+            
             <h4>${remote.description}</h4>
             <p>${remote.ipAddress}</p>
-            <button class="delete-remote-btn">Delete remote</button>
             <div class="commands">
                 <button class="ping-btn">
                     Ping Remote
                 </button>
                 <button class="clear-terminal-btn">
-                    Clear terminal for this remote
+                    Clear terminal
                 </button>
                 <button class="ssh-connect-btn">
-                    Connect to remote with SSH
+                    SSH to remote
                 </button>
                 <button class="check-processes-btn">
-                    Check processes and ports
+                    Processes and ports
                 </button>    
                 <button class="check-docker-processes-btn">
-                    Check Docker Processes
+                    Docker Processes
                 </button>
                 <button class="exit-remote-btn">
                     Exit Remote

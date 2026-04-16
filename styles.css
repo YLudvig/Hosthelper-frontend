@@ -255,3 +255,56 @@ input:focus, select:focus{
     color: red;
 }
 
+.remote-card {
+    background-color: white;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.remote-card h3{
+    color: #2ecc71;
+    margin: 0;
+}
+
+.remote-card h4{
+    margin: 5px 0;
+}
+
+.commands, .custom-buttons{
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+}
+
+.remote-card button,
+.remote-card .commands button,
+.remote-card .custom-buttons button,
+.custom-command-btn {
+    background-color: white !important;
+    border: 1px solid black !important;
+    color: black !important;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin: 2px;
+    margin-top: 0;
+    padding: 4px 8px !important;
+    transition: all 0.2s;
+    width: auto;
+}
+
+.remote-card button:hover,
+.custom-command-btn:hover {
+    color: #2ecc71;
+}
+
+.remote-card .delete-remote-btn {
+    float: right;
+}
+
+.remote-card .delete-remote-btn:hover{
+    color: white;
+}
+
