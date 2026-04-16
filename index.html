@@ -50,22 +50,27 @@
 
     <!--Section for main page-->
     <section id="main-page" class="view" style="display: none;">
-      <h2>Hosthelper</h2>
-      <h3>This app helps you monitor processes on your pc and on other computers on your local network</h3>
-      <h3>You can create remotes, view processes on them simultaneously and also create your own buttons that do specific commands</h3>
+      <header class="main-header">
+        <h2>Hosthelper</h2>
+        <button id="logout-user">
+          Log out
+        </button>
+      </header>
+      <p>This app helps you monitor processes on your pc and on other computers on your local network.
+        You can create remotes, view processes on them simultaneously and also create your own buttons that do specific commands you set yourself.</p>
       <p>The intent is for this application to function as a convenient GUI to get an overview of your various devices and processes without having to
         ump between terminals and windows and look up your various SSH login information</p>
 
 
-      <button id="refetch-remotes">Refetch My Remotes</button>
+      <button id="refetch-remotes">Refetch Remotes</button>
 
-      <button id="btn-toggle-remoteform">Add New Remote</button>
+      <button id="btn-toggle-remoteform">Add Remote</button>
 
-      <button id="btn-toggle-editremoteform">Edit Existing Remote</button>
+      <button id="btn-toggle-editremoteform">Edit Remotes</button>
 
-      <button id="btn-toggle-buttonform">Add New Button</button>
+      <button id="btn-toggle-buttonform">Add Button</button>
 
-      <button id="btn-toggle-editbuttonform">Edit Existing Button</button>
+      <button id="btn-toggle-editbuttonform">Edit Buttons</button>
 
       <form id="remote-form">
         <div id="remote-form-container" class="hidden">
@@ -167,9 +172,6 @@
       <div id="remote-container">
       </div>
 
-      <button id="logout-user">
-        Log out from profile
-      </button>
     </section>
 
     <script type="module" src="./renderer.js"></script>

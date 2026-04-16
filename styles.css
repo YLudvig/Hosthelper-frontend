@@ -1,19 +1,32 @@
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /*Goes for all sections, sets basic styling*/
 .view {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center ;
     max-width: 1600px;
     margin: 0 auto;
     padding: 40px;
 }
 
-#remote-form-container{
-    
+#remote-form-container,
+#editremote-form-container,
+#button-form-container,
+#editbutton-form-container{
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background: #f9f9f9
 }
 
 /* Ensures vertical stacking of input and labels */
@@ -65,6 +78,15 @@ button {
 }
 
 
+#login-page, #register-page{
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    border: 2px solid black;
+    background-color: white;
+    padding: 30px;
+}
+
 
 /* Styling for register page */
 #register-page{
@@ -78,7 +100,6 @@ button {
 
 #register-page h1{
     margin-top: 0;
-    text-transform: uppercase;
     border-bottom: 4px solid #2ecc71;
     display: inline-block;
     padding-bottom: 5px;
@@ -91,13 +112,12 @@ button {
     cursor: pointer;
     font-weight: bold;
     padding: 12px;
-    text-transform: uppercase;
     transition: background-color 0.2s;
     width: 100%;
 }
 
 #register-user:hover {
-    background-color: #2ecc71;
+    color: #2ecc71;
 }
 
 #login-link {
@@ -124,7 +144,6 @@ button {
 
 #login-page h1{
     margin-top: 0;
-    text-transform: uppercase;
     border-bottom: 4px solid #2ecc71;
     display: inline-block;
     padding-bottom: 5px;
@@ -132,18 +151,17 @@ button {
 
 #login-user {
     background-color: black;
-    border:none;
     color: white;
     cursor: pointer;
     font-weight: bold;
+    margin-top: 0;
     padding: 12px;
-    text-transform: uppercase;
     transition: background-color 0.2s;
     width: 100%;
 }
 
 #login-user:hover {
-    background-color: #2ecc71;
+    color: #2ecc71;
 }
 
 #register-link {
@@ -159,7 +177,7 @@ button {
 
 #main-page{
     background-color: white;
-    border: 2px solid black;
+    border: 1px solid black;
     color: black;
     margin: 20px auto;
     max-width: 800px;
@@ -170,25 +188,23 @@ button {
     border-bottom: 4px solid #2ecc71;
     display: inline-block;
     margin-bottom: 10px;
-    text-transform: uppercase;
 }
 
 #main-page h3 {
     color: #333;
     font-size: 1.1rem;
-    font-weight: normal;
     margin: 5px 0;
 }
 
 #main-page > button {
     background-color: white;
-    border: 2px solid black;
+    border: 1px solid black;
     color: black;
     cursor: pointer;
     font-weight: bold;
     margin: 5px 2px;
-    padding: 10px 15px;
-    text-transform: uppercase;
+    padding: 5px 10px;
+    font-size: 0.75rem;
     transition: all 0.2s;
 }
 
@@ -197,12 +213,6 @@ button {
     color: #2ecc71;
 }
 
-form {
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    background: #f9f9f9;
-}
 
 input[type="text"], select {
     border: 2px solid #000000;
@@ -214,5 +224,34 @@ input[type="text"], select {
 input:focus, select:focus{
     outline: none;
     border-color: #2ecc71;
+}
+
+.main-header{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.main-header h2{
+    margin:0;
+}
+
+#logout-user {
+    background-color: white;
+    border:1px solid black;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.7rem;
+    margin-top: 0;
+    padding: 6px 12px;
+    transition: background-color 0.2s;
+    width: auto;
+}
+
+#logout-user:hover {
+    color: red;
 }
 
