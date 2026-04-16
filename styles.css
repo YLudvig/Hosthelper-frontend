@@ -7,9 +7,9 @@
 .view {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px;
 }
 
 #remote-form-container{
@@ -50,7 +50,10 @@ button {
     background: black;
     color: white;
     padding: 10px;
-    height: 150px;
+    height: 500px;
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
     overflow-y: auto;
     font-size: 12px;
     border-radius: 4px;

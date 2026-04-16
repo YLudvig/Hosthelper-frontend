@@ -66,7 +66,7 @@ ipcMain.on('execute-command', (event, {remoteId, commandString}) => {
 
     child.on('close', (code) => {
       delete sshdRemotes[remoteId];
-      event.reply(`terminal-output-${remoteId}`, `\n[SSH Session Closed with ${code}`);
+      event.reply(`terminal-output-${remoteId}`, `\nSSH Session Closed with ${code}`);
     });
     return;
   }
